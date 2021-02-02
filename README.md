@@ -1,4 +1,4 @@
-## html, css, javascript 만으로 TO-DO app 만들어보기!
+## 알고리즘 사이트 문제 풀이 저장소
 
 ## author
 
