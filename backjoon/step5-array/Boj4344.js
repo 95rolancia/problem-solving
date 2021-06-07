@@ -26,8 +26,7 @@ for (let t = 0; t < T; t++) {
   const aver = arr.reduce((a, b) => a + b) / N;
 
   let cnt = arr.filter((score) => score > aver).length;
-  let result = cnt / N;
-  let answer = (Math.round(result * 100000) / 100000) * 100;
+  let result = (cnt / N) * 100;
 
-  console.log(answer.toFixed(3) + "%");
+  console.log(result.toFixed(3) + "%");
 }
