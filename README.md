@@ -1,15 +1,12 @@
 ## 알고리즘 사이트 문제 풀이 저장소
 
-## author
-
-- [rolancia](https://github.com/95rolancia)
-
 ## 🏅 사용 언어
 
-- Java
+- JavaScript(메인, 프론트엔드 개발자라면 JS에 능숙해야 함)
 - Python
-- JavaScript
+- Java
 
 ## 목적
 
 - 개인 풀이 기록
+- 모든 기업의 코딩 테스트를 무찌르기 위해서
