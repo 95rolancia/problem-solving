@@ -13,7 +13,17 @@ const input = (() => {
   return () => stdin[line++];
 })();
 
-const N = parseInt(input());
-
-let five = parseInt(N / 5);
-console.log(five);
+let N = parseInt(input());
+let result = 0;
+while (true) {
+  if (N % 5 === 0) {
+    result += N / 5;
+    break;
+  } else if (N < 3) {
+    result = -1;
+    break;
+  }
+  N -= 3;
+  result++;
+}
+console.log(result);
