@@ -15,25 +15,18 @@ const input = (() => {
   return () => stdin[line++];
 })();
 
-const memo = Array.from({ length: 55 }, () => Array.from({ length: 55 }, () => Array(55).fill(0)));
-while (true) {
-  const [a, b, c] = input().split(' ').map(Number);
-  if (a === -1 && b === -1 && c === -1) break;
-  console.log(`w(${a}, ${b}, ${c}) = ${w(a, b, c)}`);
+const str1 = input();
+const str2 = input();
+const dp = Array.from({ length: str1.length + 1 }, () => Array(str2.length + 1).fill(0));
+
+for (let i = 1; i <= str1.length; i++) {
+  for (let j = 1; j <= str2.length; j++) {
+    if (str1[i - 1] === str2[j - 1]) {
+      dp[i][j] = dp[i - 1][j - 1] + 1;
+    } else {
+      dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
 }
 
-function w(a, b, c) {
-  if (a <= 0 || b <= 0 || c <= 0) {
-    return 1;
-  }
-  if (memo[a][b][c] !== 0) return memo[a][b][c];
-  if (a > 20 || b > 20 || c > 20) {
-    return w(20, 20, 20);
-  }
-  if (a < b && b < c) {
-    memo[a][b][c] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c);
-    return memo[a][b][c];
-  }
-  memo[a][b][c] = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1);
-  return memo[a][b][c];
-}
+console.log(dp[str1.length][str2.length]);
