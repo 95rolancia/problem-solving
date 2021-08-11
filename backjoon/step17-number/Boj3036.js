@@ -1,6 +1,6 @@
 /*
-    문제 : 검문 (https://www.acmicpc.net/problem/2981)
-    난이도 : 골드 5
+    문제 : 링 (https://www.acmicpc.net/problem/3036)
+    난이도 : 실버 3
 */
 const fs = require('fs');
 const stdin = (
