@@ -7,9 +7,7 @@ const stdin = (
   process.platform === 'linux'
     ? fs.readFileSync('/dev/stdin').toString()
     : `3
-6  
-36  
-216`
+12 1 24`
 ).split('\n');
 
 const input = (() => {
@@ -18,24 +16,14 @@ const input = (() => {
 })();
 
 const N = +input();
-let arr = [];
-for (let i = 0; i < N; i++) {
-  arr.push(+input());
+const rings = input().split(' ').map(Number);
+
+let firstRing = rings[0];
+for (let i = 1; i < N; i++) {
+  let nextRing = rings[i];
+  let gcdValue = gcd(firstRing, nextRing);
+  console.log(firstRing / gcdValue + '/' + nextRing / gcdValue);
 }
-
-arr.sort((a, b) => b - a);
-
-let gcdValue = arr[0] - arr[1];
-for (let i = 1; i < arr.length - 1; i++) {
-  gcdValue = gcd(gcdValue, arr[i] - arr[i + 1]);
-}
-
-let answer = '';
-for (let i = 2; i <= gcdValue; i++) {
-  if (gcdValue % i === 0) answer += i + ' ';
-}
-
-console.log(answer);
 
 function gcd(a, b) {
   while (b !== 0) {
