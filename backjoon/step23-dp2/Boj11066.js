@@ -6,11 +6,9 @@ const fs = require('fs');
 const stdin = (
   process.platform === 'linux'
     ? fs.readFileSync('/dev/stdin').toString()
-    : `2
+    : `1
 4
-40 30 30 50
-15
-1 21 3 4 5 35 5 4 3 5 98 21 14 17 32`
+40 30 30 50`
 ).split('\n');
 
 const input = (() => {
@@ -30,15 +28,16 @@ for (let tcCnt = 0; tcCnt < T; tcCnt++) {
     sum[i] = sum[i - 1] + files[i];
   }
 
-  const dp = Array.from({ length: 501 }, () => new Array(501).fill(0));
+  const dp = Array.from({ length: 5 }, () => new Array(5).fill(0));
 
-  for (let i = 1; i <= K; i++) {
-    for (let j = 1; j <= K - i; j++) {
+  for (let i = 1; i < K; i++) {
+    for (let j = 1; j + i <= K; j++) {
       dp[j][i + j] = INF;
-      for (let k = j; k < i + j; k++) {
+      for (let mid = j; mid < i + j; mid++) {
+        console.log(i, j, mid);
         dp[j][i + j] = Math.min(
           dp[j][i + j],
-          dp[j][k] + dp[k + 1][i + j] + sum[i + j] - sum[j - 1]
+          dp[j][mid] + dp[mid + 1][i + j] + sum[i + j] - sum[j - 1]
         );
       }
     }
