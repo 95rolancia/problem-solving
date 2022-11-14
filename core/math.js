@@ -33,3 +33,29 @@ function isPrimeNumber(number) {
   }
   return true;
 }
+/**
+ * 주어진 두 수의 최대공약수를 구하는 함수
+ * @param {number} a
+ * @param {number} b
+ * @returns {number} 최대공약수
+ */
+function gcd(a, b) {
+  if (a === 0) return b;
+  return gcd(a % b, a);
+}
+
+/**
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {number} 최소공배수
+ */
+
+function lcm(a, b) {
+  return (a * b) / gcd(a, b);
+
+  function gcd(a, b) {
+    if (a === 0) return b;
+    return gcd(a % b, a);
+  }
+}
