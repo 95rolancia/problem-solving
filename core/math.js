@@ -59,3 +59,18 @@ function lcm(a, b) {
     return gcd(a % b, a);
   }
 }
+
+/**
+ * @description 주어진 숫자의 약수의 개수를 구하는 함수 | 시간복잡도: O(√N) 
+ * @param {number} number
+ * @returns {number} 약수의 개수
+ */
+
+ function getDivisorCnt(number) {
+  let cnt = 0;
+  for(let i = 1; i * i <= number; i++) {
+      if (i * i === number) cnt++;
+      else if (number % i == 0) cnt += 2;
+  }
+  return cnt;
+}
