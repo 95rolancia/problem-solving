@@ -61,16 +61,34 @@ function lcm(a, b) {
 }
 
 /**
- * @description 주어진 숫자의 약수의 개수를 구하는 함수 | 시간복잡도: O(√N) 
+ * @description 주어진 숫자의 약수의 개수를 구하는 함수 | 시간복잡도: O(√N)
  * @param {number} number
  * @returns {number} 약수의 개수
  */
 
- function getDivisorCnt(number) {
+function getDivisorCnt(number) {
   let cnt = 0;
-  for(let i = 1; i * i <= number; i++) {
-      if (i * i === number) cnt++;
-      else if (number % i == 0) cnt += 2;
+  for (let i = 1; i * i <= number; i++) {
+    if (i * i === number) cnt++;
+    else if (number % i == 0) cnt += 2;
   }
   return cnt;
+}
+
+/**
+ * @description 에라토스테네스의 체
+ * @param {number} to
+ * @returns {number[]} result
+ */
+function getPrimeArr(to) {
+  const result = Array(to + 1).fill(true);
+  result[0] = result[1] = false;
+  for (let i = 2; i * i < result.length; i++) {
+    if (result[i]) continue;
+    for (let j = i * i; j < result.length; j += i) {
+      result[j] = false;
+    }
+  }
+
+  return result;
 }
