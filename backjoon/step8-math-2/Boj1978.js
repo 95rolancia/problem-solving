@@ -1,7 +1,7 @@
 /*
     Backjoon 1978번 
     문제 : 소수 찾기(https://www.acmicpc.net/problem/1978)
-    난이도 : 실버 4
+    난이도 : 실버 5
 */
 const fs = require("fs");
 const stdin = (
@@ -16,20 +16,19 @@ const input = (() => {
   return () => stdin[line++];
 })();
 
-const N = parseInt(input());
-const arr = input().split(" ").map(Number);
+let N = parseInt(input());
+let answer = input().split(" ").map(Number).filter(isPrimeNumber);
+console.log(answer);
 
-let answer = 0;
-arr.forEach((number) => {
-  if (isPrime(number)) answer++;
-});
-
-function isPrime(number) {
-  if (number === 1) return false;
-  for (let i = 2; i <= Math.sqrt(number); i++) {
+/**
+ * 주어진 숫자가 소수인지 판별하는 함수
+ * @param {number} number
+ * @returns {boolean}
+ */
+function isPrimeNumber(number) {
+  if (number < 2) return false;
+  for (let i = 2; i * i <= number; i++) {
     if (number % i === 0) return false;
   }
   return true;
 }
-
-console.log(answer);
