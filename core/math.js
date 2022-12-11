@@ -84,7 +84,7 @@ function getPrimeArr(to) {
   const result = Array(to + 1).fill(true);
   result[0] = result[1] = false;
   for (let i = 2; i * i < result.length; i++) {
-    if (result[i]) continue;
+    if (!result[i]) continue;
     for (let j = i * i; j < result.length; j += i) {
       result[j] = false;
     }
