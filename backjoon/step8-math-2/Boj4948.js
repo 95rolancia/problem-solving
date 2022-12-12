@@ -1,6 +1,6 @@
 /*
     Backjoon 4948번 
-    문제 : 소인수분해(https://www.acmicpc.net/problem/4948)
+    문제 : 베르트랑 공준(https://www.acmicpc.net/problem/4948)
     난이도 : 실버 2
 */
 const fs = require("fs");
@@ -22,23 +22,29 @@ const input = (() => {
   return () => stdin[line++];
 })();
 
-let prime = Array(250000).fill(true);
-
-prime[0] = prime[1] = false;
-for (let i = 2; i * i <= 250000; i++) {
-  if (prime[i] === true) {
-    for (let j = i * 2; j <= 250000; j += i) {
-      prime[j] = false;
-    }
-  }
-}
+let primeArr = getPrimeNumArr(250000);
 
 while (true) {
   const n = parseInt(input());
   if (n === 0) break;
-  let answer = 0;
-  for (let i = n + 1; i <= 2 * n; i++) {
-    if (prime[i] === true) answer++;
-  }
+  let answer = primeArr.filter((v) => v > n && v <= 2 * n).length;
   console.log(answer);
+}
+
+/**
+ * @description 에라토스테네스의 체에서 소수들을 원소로 가지는 배열
+ * @param {number} to
+ * @returns {boolean[]} result
+ */
+function getPrimeNumArr(to) {
+  const result = Array(to + 1).fill(true);
+  result[0] = result[1] = false;
+  for (let i = 2; i * i < result.length; i++) {
+    if (!result[i]) continue;
+    for (let j = i * i; j < result.length; j += i) {
+      result[j] = false;
+    }
+  }
+
+  return result.map((v, idx) => (v ? idx : null)).filter((v) => v);
 }
