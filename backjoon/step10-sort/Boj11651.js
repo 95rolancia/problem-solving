@@ -19,19 +19,19 @@ const input = (() => {
   return () => stdin[line++];
 })();
 
-let result = "";
 const N = parseInt(input());
 const arr = [];
 for (let i = 0; i < N; i++) {
-  const [x, y] = input().split(" ").map(Number);
-  arr.push([x, y]);
+  arr.push(input().split(" "));
 }
 
-arr
-  .sort((a, b) => {
-    if (a[1] === b[1]) return a[0] - b[0];
-    return a[1] - b[1];
+const answer = arr
+  .sort(([x1, y1], [x2, y2]) => {
+    if (y1 === y2) {
+      return x1 - x2;
+    }
+    return y1 - y2;
   })
-  .forEach((a) => (result += a.join(" ") + "\n"));
+  .reduce((acc, [x, y]) => (acc += `${x} ${y}\n`), "");
 
-console.log(result);
+console.log(answer);
