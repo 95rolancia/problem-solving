@@ -7,8 +7,12 @@ const fs = require("fs");
 const stdin = (
   process.platform === "linux"
     ? fs.readFileSync("/dev/stdin").toString()
-    : `1
-4000`
+    : `5
+1
+2
+3
+4
+5`
 ).split("\n");
 
 const input = (() => {
@@ -18,12 +22,18 @@ const input = (() => {
 
 const N = parseInt(input());
 const arr = Array(8001).fill(0);
+const numbers = [];
 // -3999 ~ 3999 > 1 ~ 7999
 let sum = 0;
 let max = Number.MIN_SAFE_INTEGER;
 let min = Number.MAX_SAFE_INTEGER;
+
+let maxFreqCnt = -1;
+let maxFreqArr = [];
+
 for (let i = 0; i < N; i++) {
   const value = parseInt(input());
+  numbers.push(value);
   sum += value;
   arr[value + 4000]++;
 
@@ -34,36 +44,37 @@ for (let i = 0; i < N; i++) {
   if (min > value) {
     min = value;
   }
-}
-// 1. 산술평균
-console.log((sum / N).toFixed(0));
 
-let median = 10000;
-let mode = 10000;
-let count = 0; // 중앙값 빈도 누적 수
-let mode_max = 0; // 최빈값의 최댓값
-
-let flag = false;
-
-for (let i = min + 4000; i <= max + 4000; i++) {
-  if (arr[i] > 0) {
-    if (count < Math.floor((N + 1) / 2)) {
-      count += arr[i];
-      median = i - 4000;
-    }
-
-    if (mode_max < arr[i]) {
-      mode_max = arr[i];
-      mode = i - 4000;
-      flag = true;
-    } else if (mode + max === arr[i] && flag) {
-      mode = i - 4000;
-      flag = false;
-    }
+  if (maxFreqCnt < arr[value + 4000]) {
+    maxFreqCnt = arr[value + 4000];
   }
 }
-console.log(median);
-console.log(mode);
+numbers.sort((a, b) => a - b);
+
+// 1. 산술평균
+console.log(Math.round(sum / N).toString());
+
+// 2. 중앙값
+console.log(numbers[Math.floor(N / 2)]);
+
+// 3. 최빈값
+const freq = [];
+for (let i = 0; i < 8001; i++) {
+  if (arr[i] === maxFreqCnt) {
+    freq.push(i - 4000);
+  }
+}
+
+console.log(freq);
+
+const freq2 = arr.filter((v) => v === maxFreqCnt);
+console.log(freq2);
+
+if (freq.length > 1) {
+  console.log(freq[1]);
+} else {
+  console.log(freq[0]);
+}
 
 // 4. 범위
 console.log(max - min);
