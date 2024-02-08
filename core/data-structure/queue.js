@@ -27,12 +27,13 @@ class Queue {
   #head;
   #tail;
   #size;
+
   constructor() {
     this.#head = null;
     this.#tail = null;
     this.#size = 0;
   }
-  시;
+
   get size() {
     return this.#size;
   }
@@ -54,7 +55,6 @@ class Queue {
   dequeue() {
     if (this.#head == null) {
       throw new Error("q is empty");
-      return;
     }
     const value = this.#head.value;
     this.#head = this.#head.next;
@@ -62,11 +62,18 @@ class Queue {
     return value;
   }
 
-  peek() {
+  front() {
     if (this.#head === null) {
       throw new Error("q is empty");
     }
     return this.#head.value;
+  }
+
+  back() {
+    if (this.#tail === null) {
+      throw new Error("q is empty");
+    }
+    return this.#tail.value;
   }
 
   print() {
@@ -90,7 +97,7 @@ function solution(priorities, location) {
   priorities.sort((a, b) => b - a);
 
   while (true) {
-    const [v, i] = q.peek();
+    const [v, i] = q.front();
     if (priorities[answer] === v) {
       q.dequeue();
       answer++;
