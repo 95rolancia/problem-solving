@@ -2,10 +2,10 @@
     문제 : 균형잡힌 세상 (https://www.acmicpc.net/problem/4949)
     난이도 : 실버 4
 */
-const fs = require('fs');
+const fs = require("fs");
 const stdin = (
-  process.platform === 'linux'
-    ? fs.readFileSync('/dev/stdin').toString()
+  process.platform === "linux"
+    ? fs.readFileSync("/dev/stdin").toString()
     : `So when I die (the [first] I will see in (heaven) is a score list).
 [ first in ] ( first out ).
 Half Moon tonight (At least it is better than no Moon at all].
@@ -14,43 +14,44 @@ Help( I[m being held prisoner in a fortune cookie factory)].
 ([ (([( [ ] ) ( ) (( ))] )) ]).
  .
 .`
-).split('\n');
+).split("\n");
 
 const input = (() => {
   let line = 0;
   return () => stdin[line++];
 })();
 
+const map = {
+  "[": "]",
+  "(": ")",
+};
+
 while (true) {
-  const arr = input().split('');
-  if (arr.length === 1 && arr[0] === '.') break;
+  const sentence = input();
+  // ".으로 시작하면 끝"
+  if (sentence[0] === ".") break;
 
+  let answer = "yes";
   const stk = [];
-  let find = true;
-  for (let j = 0; j < arr.length; j++) {
-    if (arr[j] === '(' || arr[j] === '[') {
-      stk.push(arr[j]);
-    } else if (arr[j] === ')' || arr[j] === ']') {
-      if (stk.length === 0) {
-        console.log('no');
-        find = false;
-        break;
-      } else {
-        if (arr[j] === ']' && stk[stk.length - 1] === '[') {
-          stk.pop();
-        } else if (arr[j] === ')' && stk[stk.length - 1] === '(') {
-          stk.pop();
-        } else {
-          find = false;
-          break;
-        }
-      }
-    } else {
-      continue;
-    }
-    // console.log(stk);
-  }
+  for (const char of Array.from(sentence)) {
+    // 여는 괄호일 때
+    if (Object.keys(map).indexOf(char) !== -1) {
+      stk.push(char);
 
-  if (stk.length > 0) console.log('no');
-  else if (find) console.log('yes');
+      // 닫는 괄호일 때
+    } else if (Object.values(map).indexOf(char) !== -1) {
+      // 닫는 괄호일 때 현재 문자가 스택 최상단 값과 짝일 때 스택에서 제거
+      if (stk.length > 0 && map[stk[stk.length - 1]] === char) {
+        stk.pop();
+      } else {
+        // 괄호쌍이 만들어지지 않으므로 종료
+        answer = "no";
+        break;
+      }
+    }
+  }
+  // 스택이 비워지지 않았다면 쌍을 못찾음
+  if (stk.length > 0) answer = "no";
+
+  console.log(answer);
 }
