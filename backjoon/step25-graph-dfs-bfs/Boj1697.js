@@ -4,123 +4,110 @@
 */
 
 const fs = require("fs");
-const stdin = (
-  process.platform === "linux"
-    ? fs.readFileSync("/dev/stdin").toString()
-    : `5 17`
-).split("\n");
+const stdin = (process.platform === "linux" ? fs.readFileSync("/dev/stdin").toString() : `5 17`).split("\n");
 
 const input = (() => {
   let line = 0;
   return () => stdin[line++];
 })();
 
+class Node {
+  #value;
+  #next;
+  constructor(value) {
+    this.#value = value;
+    this.#next = null;
+  }
+
+  get value() {
+    return this.#value;
+  }
+
+  set value(v) {
+    this.#value = v;
+  }
+
+  get next() {
+    return this.#next;
+  }
+
+  set next(value) {
+    this.#next = value;
+  }
+}
+
 class Queue {
+  #head;
+  #tail;
+  #size;
+
   constructor() {
-      this._head = null;
-      this._tail = null;
-      this.size = 0;
+    this.#head = null;
+    this.#tail = null;
+    this.#size = 0;
   }
 
-  _createNode(value, prev, next) {
-      return {
-          value,
-          prev,
-          next
-      };
+  get size() {
+    return this.#size;
   }
 
-  push(value) {
-      const curNode = this._createNode(value, this._tail, this._head);
-      if (this._head) {
-          this._tail.next = curNode;
-          this._head.prev = curNode;
-          this._tail = curNode;
-      } else {
-          this._head = curNode;
-          this._tail = curNode;
-          curNode.prev = curNode;
-          curNode.next = curNode;
-      }
-      this.size++;
+  enqueue(value) {
+    const newNode = new Node(value);
+
+    if (this.#head == null) {
+      this.#head = newNode;
+      this.#tail = newNode;
+    } else {
+      this.#tail.next = newNode;
+      this.#tail = newNode;
+    }
+
+    this.#size++;
   }
 
-  pop() {
-      if (this.size > 2) {
-          const value = this._head.value;
-          const newHead = this._head.next;
-          this._head = newHead;
-          newHead.prev = this._tail;
-          this._tail.next = this._head;
-          this.size--;
-          return value;
-      } else if (this.size === 2) {
-          const value = this._head.value;
-          this._head = this._tail;
-          this._tail.prev = this._tail;
-          this._tail.next = this._tail;
-          this.size--;
-          return value;
-      } else if (this.size === 1) {
-          const value = this._head.value;
-          this._head = null;
-          this._tail = null;
-          this.size--;
-          return value;
-      } else {
-          return -1;
-      }
-  }
-
-  empty() {
-      return this.size ? 0 : 1;
+  dequeue() {
+    if (this.#head == null) {
+      throw new Error("q is empty");
+    }
+    const value = this.#head.value;
+    this.#head = this.#head.next;
+    this.#size--;
+    return value;
   }
 
   front() {
-      return this._head ? this._head.value : -1;
+    if (this.#head === null) {
+      throw new Error("q is empty");
+    }
+    return this.#head.value;
   }
 
   back() {
-      return this._tail ? this._tail.value : -1;
+    if (this.#tail === null) {
+      throw new Error("q is empty");
+    }
+    return this.#tail.value;
   }
 }
 
-const [N, K] = input().split(" ").map(Number);
+const [n, k] = input().split(" ").map(Number);
 
-console.log(bfs(N, 0));
+const dis = Array(100001).fill(-1);
 
-function bfs() {
-  const visited = Array(100001).fill(false);
-  const q = new Queue();
-  q.push([N, 0]);
-  visited[N] = true;
+const q = new Queue();
+q.enqueue(n);
+dis[n] = 0;
 
-  while(q.size > 0) {
-    const [curX, time] = q.pop();
+while (dis[k] === -1) {
+  const cur = q.dequeue();
 
-    if(curX === K) return time;
+  for (const next of [cur - 1, cur + 1, cur * 2]) {
+    if (next < 0 || next > 100000) continue;
+    if (dis[next] !== -1) continue;
 
-    let nextX = curX - 1;
-    if(valid(nextX, visited)) {
-      q.push([nextX, time + 1]);
-      visited[nextX] = true;
-    }
-
-    nextX = curX + 1;
-    if(valid(nextX, visited)) {
-      q.push([nextX, time + 1]);
-      visited[nextX] = true;
-    }
-
-    nextX = curX * 2;
-    if(valid(nextX, visited)) {
-      q.push([nextX, time + 1]);
-      visited[nextX] = true;
-    }
+    q.enqueue(next);
+    dis[next] = dis[cur] + 1;
   }
 }
 
-function valid(x, visited) {
-  if(x < 0 || x > 100000 || visited[x]) return false;
-  return true;
-}
+console.log(dis[k]);
