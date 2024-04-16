@@ -22,7 +22,6 @@ const numbers = input()
   .split(" ")
   .map(Number)
   .sort((a, b) => a - b);
-console.log(numbers);
 
 const arr = Array(M).fill(null);
 const used = Array(N + 1).fill(null);
